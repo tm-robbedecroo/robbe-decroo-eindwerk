@@ -34,7 +34,7 @@ export default function LandingPage() {
                   Elevate Your Team Building with TeamSync
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Streamline your company's team-building activities. Boost engagement, track progress, and foster a
+                  Streamline your company&apos;s team-building activities. Boost engagement, track progress, and foster a
                   stronger workplace culture.
                 </p>
               </div>
