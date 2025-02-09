@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Users, Calendar, TrendingUp } from "lucide-react"
 import Navigation from "@/components/page-blocks/navigation"
 import Footer from "@/components/page-blocks/footer"
+import Link from "next/link"
 
 export default function LandingPage() {
   return (
@@ -21,9 +22,11 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Button className="inline-flex items-center justify-center">
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link href="/register" className="inline-flex items-center justify-center">
+                  <Button>
+                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
                 <Button variant="outline">Learn More</Button>
               </div>
             </div>
