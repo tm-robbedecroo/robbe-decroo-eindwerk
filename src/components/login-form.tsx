@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { signIn } from "@/lib/auth"
 
 export function LoginForm({
   className,
@@ -25,7 +26,13 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={async (formData: FormData) => {
+            "use server";
+            await signIn("credentials", {
+              email: formData.get("email") as string,
+              password: formData.get("password") as string,
+            });
+          }}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
@@ -59,6 +66,7 @@ export function LoginForm({
                     id="email"
                     type="email"
                     placeholder="m@example.com"
+                    name="email"
                     required
                   />
                 </div>
@@ -72,7 +80,7 @@ export function LoginForm({
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input id="password" type="password" name="password" required />
                 </div>
                 <Button type="submit" className="w-full">
                   Login
