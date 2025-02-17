@@ -5,8 +5,14 @@ import Link from 'next/link';
 import { useState, useRef, useEffect } from "react";
 import { Users, Menu, XIcon, UserRound } from "lucide-react";
 import { Button } from '../ui/button';
+import { getAuthUser } from '@/db/actions';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+    user: any;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ user }) => {
+
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -55,8 +61,8 @@ const Navbar: React.FC = () => {
                 <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="#">Pricing</Link>
                 <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="#">About</Link>
                 <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="#">Contact</Link>
-                <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="login">
-                    <Button><UserRound className="inline h-3"/>Login</Button>
+                <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href={user ? "" : "/login"}>
+                    <Button><UserRound className="inline h-3"/>{user ? user.firstName : "Login"}</Button>
                 </Link>
             </nav>
 
