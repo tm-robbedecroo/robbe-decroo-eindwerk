@@ -3,8 +3,10 @@
 import Link from 'next/link';
 
 import { useState, useRef, useEffect } from "react";
-import { Users, Menu, XIcon, UserRound } from "lucide-react";
+import { Users, Menu, XIcon, UserRound, LogOut, Settings } from "lucide-react";
 import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { signOut } from 'next-auth/react';
 
 interface NavbarProps {
     user: {
@@ -66,9 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
                 <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="#">Pricing</Link>
                 <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="#">About</Link>
                 <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="#">Contact</Link>
-                <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href={user ? "" : "/login"}>
-                    <Button><UserRound className="inline h-3"/>{user ? user.firstName : "Login"}</Button>
-                </Link>
+                <UserMenu user={user} />
             </nav>
 
             {/* Mobile Menu */}
@@ -85,12 +85,58 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
                     <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">About</Link>
                     <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">Contact</Link>
                     <Link className="text-sm font-medium hover:underline underline-offset-4" href="login">
-                        <Button><UserRound className="inline w-full"/>Login</Button>
+                        <Button><UserRound className="inline w-full"/>{user ? user.firstName : "Login"}</Button>
                     </Link>
                 </nav>
             </div>
         </header>
     );
 };
+
+interface UserMenuProps {
+    user: {
+        firstName: string,
+        lastName: string,
+        email: string,
+        role: string,
+        id: string,
+    } | null | undefined;
+};
+
+function UserMenu({ user }: UserMenuProps) {
+    const [isOpen, setIsOpen] = useState(false)
+  
+    if (!user) {
+      return (
+        <Link className="text-sm font-medium hover:underline underline-offset-4 my-auto" href="/login">
+          <Button>
+            <UserRound className="mr-2 h-4 w-4" />
+            Login
+          </Button>
+        </Link>
+      )
+    }
+  
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button>
+            <UserRound className="mr-2 h-4 w-4" />
+            {user.firstName}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-56" align="end" alignOffset={0} side="bottom" sideOffset={5}>
+          <div className="grid gap-1">
+            <Button variant="ghost" className="w-full justify-start">
+              <Settings className="mr-2 h-4 w-4" />Account Settings
+            </Button>
+            <Button variant="ghost" className="w-full justify-start" onClick={() => signOut()}>
+                <LogOut className="mr-2 h-4 w-4" />Logout
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+    )
+  }
 
 export default Navbar;

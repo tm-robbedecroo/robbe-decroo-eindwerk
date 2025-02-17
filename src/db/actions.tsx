@@ -30,4 +30,3 @@ export async function getAuthUser(email: string) {
         console.log(error);
     }
 }
-
