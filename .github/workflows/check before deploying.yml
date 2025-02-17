@@ -13,20 +13,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22.11.0'
-      
+
       - name: Install dependencies
         run: npm install
-      
+
       - name: Run Build
         run: npm run build
-      
+
       - name: Deploy to Vercel
-        if: success()  # Deploy only if build succeeds
+        if: success() && github.ref == 'refs/heads/main'  # Deploy only if build succeeds and push is on main
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
