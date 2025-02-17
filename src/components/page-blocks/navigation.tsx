@@ -5,11 +5,16 @@ import Link from 'next/link';
 import { useState, useRef, useEffect } from "react";
 import { Users, Menu, XIcon, UserRound } from "lucide-react";
 import { Button } from '../ui/button';
-import { getAuthUser } from '@/db/actions';
 
 interface NavbarProps {
-    user: any;
-}
+    user: {
+        firstName: string,
+        lastName: string,
+        email: string,
+        role: string,
+        id: string,
+    } | null;
+};
 
 const Navbar: React.FC<NavbarProps> = ({ user }) => {
 
