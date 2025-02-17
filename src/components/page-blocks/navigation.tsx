@@ -13,7 +13,7 @@ interface NavbarProps {
         email: string,
         role: string,
         id: string,
-    } | null;
+    } | null | undefined;
 };
 
 const Navbar: React.FC<NavbarProps> = ({ user }) => {
