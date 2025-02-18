@@ -1,8 +1,10 @@
 "use server";
+import { signIn } from "@/lib/auth";
 import { db } from "./client";
 import { users } from "./schema";
 
 import { eq } from "drizzle-orm";
+import { redirect, RedirectType } from "next/navigation";
 
 export async function registerManager(formData: FormData) {
     try {
