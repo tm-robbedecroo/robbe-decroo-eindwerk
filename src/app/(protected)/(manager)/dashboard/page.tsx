@@ -1,6 +1,6 @@
 import AppSidebar from "@/components/page-blocks/sidebar";
 import { getAuthUser } from "@/db/actions";
-import { auth } from "@/lib/auth";
+import { auth } from "@/../auth";
 
 export default async function DashboardPage() {
 

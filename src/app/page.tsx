@@ -3,7 +3,7 @@ import { ArrowRight, Users, Calendar, TrendingUp } from "lucide-react"
 import Navigation from "@/components/page-blocks/navigation"
 import Footer from "@/components/page-blocks/footer"
 import Link from "next/link"
-import { auth } from "@/lib/auth"
+import { auth } from "@/../auth"
 import { getAuthUser } from "@/db/actions"
 
 export default async function LandingPage() {
