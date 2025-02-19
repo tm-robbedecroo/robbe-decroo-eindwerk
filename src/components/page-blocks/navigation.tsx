@@ -127,6 +127,11 @@ function UserMenu({ user }: UserMenuProps) {
         </PopoverTrigger>
         <PopoverContent className="w-56" align="end" alignOffset={0} side="bottom" sideOffset={5}>
           <div className="grid gap-1">
+            <Link href={'/dashboard'}>
+              <Button variant="ghost" className="w-full justify-start">
+                <Settings className="mr-2 h-4 w-4" />Dashboard
+              </Button>
+            </Link>
             <Button variant="ghost" className="w-full justify-start">
               <Settings className="mr-2 h-4 w-4" />Account Settings
             </Button>
