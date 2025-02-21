@@ -33,7 +33,6 @@ export async function getAuthUser(email: string) {
 
 // COMPANIES
 export async function createCompany(formData: FormData, userId: String) {
-
     try {
 
         const userInput = {
@@ -46,5 +45,13 @@ export async function createCompany(formData: FormData, userId: String) {
     } catch (error) {
         console.log(error);
     }
+}
 
+export async function getUserCompany(userId: string) {
+    try {
+        const company = await db.select().from(companies).where(eq(companies.owner, userId));
+        return company[0];
+    } catch (error) {
+        console.log(error);
+    }
 }

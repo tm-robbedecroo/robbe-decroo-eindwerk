@@ -2,16 +2,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { createCompany, getAuthUser } from "@/db/actions";
+import { createCompany, getAuthUser, getUserCompany } from "@/db/actions";
 import { auth } from "@/../auth";
+import { redirect } from "next/navigation";
 
-export default function CreateCompanyPage() {
+export default async function CreateCompanyPage() {
+
+    const session = await auth();
+    const user = await getAuthUser(session?.user?.email as string);
+    const company = await getUserCompany(user?.id as string);
+
+    if(company) redirect("/dashboard");
 
     const handleCreate = async (formData: FormData) => {
         "use server";
-        const session = await auth();
-        const user = await getAuthUser(session?.user?.email as string);
-        createCompany(formData, user?.id as string);
+        await createCompany(formData, user?.id as string);
+        redirect("/dashboard");
     }
 
     return (

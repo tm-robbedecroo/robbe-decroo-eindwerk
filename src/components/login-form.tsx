@@ -31,7 +31,7 @@ export function LoginForm({
             await signIn("credentials", {
               email: formData.get("email") as string,
               password: formData.get("password") as string,
-              redirectTo: "/"
+              redirectTo: "/create-company",
             });
           }}>
             <div className="grid gap-6">
