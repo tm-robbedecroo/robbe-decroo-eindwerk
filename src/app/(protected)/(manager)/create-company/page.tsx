@@ -2,29 +2,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { createCompany, getAuthUser } from "@/db/actions";
+import { auth } from "@/../auth";
 
 export default function CreateCompanyPage() {
+
+    const handleCreate = async (formData: FormData) => {
+        "use server";
+        const session = await auth();
+        const user = await getAuthUser(session?.user?.email as string);
+        createCompany(formData, user?.id as string);
+    }
+
     return (
         <main className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
             <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="p-6 md:p-8">
                     <h1 className="text-2xl font-bold mb-6">Set up your company</h1>
-                    <form className="space-y-4">
+                    <form className="space-y-4" action={handleCreate}>
                         <div>
                             <Label htmlFor="name">Name</Label>
-                            <Input id="name" placeholder="Enter your name" />
+                            <Input id="name" name="name" placeholder="Enter your name" />
                         </div>
                         <div>
                             <Label htmlFor="description">Description</Label>
-                            <Textarea id="description" placeholder="Enter a description" />
+                            <Textarea id="description" name="description" placeholder="Enter a description" />
                         </div>
                         <div>
                             <Label htmlFor="image">Image</Label>
-                            <Input id="image" type="file" accept="image/*" />
+                            <Input id="image" name="image" type="file" accept="image/*" />
                         </div>
                         <div>
                             <Label htmlFor="banner_image">Banner Image</Label>
-                            <Input id="banner_image" type="file" accept="image/*" />
+                            <Input id="banner_image" name="banner_image" type="file" accept="image/*" />
                         </div>
                         <Button type="submit" className="w-full">
                             Set up your company

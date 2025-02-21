@@ -1,9 +1,9 @@
 "use server";
 import { db } from "./client";
-import { users } from "./schema";
-
+import { companies, users } from "./schema";
 import { eq } from "drizzle-orm";
 
+// USERS
 export async function registerManager(formData: FormData) {
     try {
         const firstName = formData.get("name")?.toString().split(" ")[0];
@@ -29,4 +29,22 @@ export async function getAuthUser(email: string) {
     } catch (error) {
         console.log(error);
     }
+}
+
+// COMPANIES
+export async function createCompany(formData: FormData, userId: String) {
+
+    try {
+
+        const userInput = {
+            name: formData.get("name") as string,
+            description: formData.get("description") as string,
+            owner: userId as string
+        };
+
+        await db.insert(companies).values(userInput);
+    } catch (error) {
+        console.log(error);
+    }
+
 }
