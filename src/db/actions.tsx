@@ -2,6 +2,7 @@
 import { db } from "./client";
 import { companies, users } from "./schema";
 import { eq } from "drizzle-orm";
+import { employees } from "./schema/employee";
 
 // USERS
 export async function registerManager(formData: FormData) {
@@ -17,6 +18,25 @@ export async function registerManager(formData: FormData) {
             role: "MANAGER" as string
         };
         await db.insert(users).values(userInput);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function registerEmployee(formData: FormData, companyId: string) {
+    try {
+        const firstName = formData.get("firstname");
+        const lastName = formData.get("lastname");
+
+        const userInput = {
+            email: formData.get("email") as string,
+            firstName: firstName as string,
+            lastName: lastName as string,
+            password: formData.get("password") as string,
+            role: "EMPLOYEE" as string,
+        };
+        const [user] = await db.insert(users).values(userInput).returning({id: users.id});
+        await db.insert(employees).values({ userId: user.id, companyId });
     } catch (error) {
         console.log(error);
     }
