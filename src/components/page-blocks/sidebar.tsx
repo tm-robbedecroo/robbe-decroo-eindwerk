@@ -121,7 +121,6 @@ export default function AppSidebar({ user }: SidebarProps) {
             </Popover>
           </SidebarFooter>
         </Sidebar>
-        <SidebarTrigger />
       </>
   )
 }

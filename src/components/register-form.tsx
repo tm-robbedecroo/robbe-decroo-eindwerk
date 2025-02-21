@@ -20,7 +20,7 @@ export function RegisterForm({
   const handleRegister = async (formData: FormData) => {
     "use server";
     registerManager(formData);
-    redirect("/");
+    redirect("/create-company");
   }
 
   return (

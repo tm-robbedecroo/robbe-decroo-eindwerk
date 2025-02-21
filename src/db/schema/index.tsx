@@ -1,3 +1,2 @@
-import { users } from "./user";
-
-export { users };
+export { users } from "./user";
+export { companies } from "./company";
