@@ -52,7 +52,7 @@ export async function getAuthUser(email: string) {
 }
 
 // COMPANIES
-export async function createCompany(formData: FormData, userId: String) {
+export async function createCompany(formData: FormData, userId: string) {
     try {
 
         const userInput = {
