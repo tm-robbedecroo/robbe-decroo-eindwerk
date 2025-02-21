@@ -1,6 +1,6 @@
 import AppSidebar from "@/components/page-blocks/sidebar";
 import { auth } from "@/../auth";
-import { getAuthUser } from "@/db/actions";
+import { getAuthUser, getUserCompany } from "@/db/actions";
 import { redirect } from "next/navigation";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
@@ -12,8 +12,10 @@ export default async function RootLayout({
 
     const session = await auth();
     const user = await getAuthUser(session?.user?.email as string);
+    const company = await getUserCompany(user?.id as string);
 
     if(!user) redirect("/login");
+    if(!company) redirect("/create-company");
 
     return (
         <SidebarProvider>
