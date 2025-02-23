@@ -42,6 +42,24 @@ export async function registerEmployee(formData: FormData, companyId: string) {
     }
 }
 
+export async function listEmployeesForCompany(companyId: string) {
+    try {
+        const employeesList = await db.select().from(employees).where(eq(employees.companyId, companyId));
+        
+        const members = await Promise.all(
+            employeesList.map(async (employee) => {
+                const [user] = await db.select().from(users).where(eq(users.id, employee.userId as string)); 
+                return user; // Niet een array van users, maar een enkel object
+            })
+        );
+        
+
+        return members;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function getAuthUser(email: string) {
     try {
         const user = await db.select().from(users).where(eq(users.email, email));
