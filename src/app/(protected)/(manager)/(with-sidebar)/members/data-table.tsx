@@ -53,11 +53,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
-        <DialogTrigger asChild><Button className="ms-2">Add employee</Button></DialogTrigger>
+        <DialogTrigger asChild><Button className="ms-2">Add member</Button></DialogTrigger>
         {Object.keys(rowSelection).length > 0 && (
-          <Button variant="destructive" size="sm" className="ms-2" onClick={() => console.log("Remove selected users")}>
-            Remove All Selected
-          </Button>
+          <Button variant="destructive" size="sm" className="ms-2" onClick={() => console.log("Remove selected users")}>Remove All Selected</Button>
         )}
       </div>
       <div className="rounded-md border">
@@ -95,12 +93,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-          Previous
-        </Button>
-        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          Next
-        </Button>
+        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>Previous</Button>
+        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>Next</Button>
       </div>
     </div>
   )

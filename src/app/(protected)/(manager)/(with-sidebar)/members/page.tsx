@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { getAuthUser, getUserCompany, listEmployeesForCompany, registerEmployee } from "@/db/actions"
 import { auth } from "@/../auth"
 import { DataTable } from "./data-table"
@@ -27,7 +26,7 @@ export default async function MembersPage() {
       <Dialog>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogTitle>Add a new member</DialogTitle>
           </DialogHeader>
           <form className="space-y-4" action={handleCreateEmployee}>
             <div className="grid grid-cols-2 gap-4">
@@ -53,7 +52,7 @@ export default async function MembersPage() {
           </form>
         </DialogContent>
         <div className="container mx-auto py-10">
-          <h1 className="text-2xl font-bold mb-5">Employees</h1>
+          <h1 className="text-2xl font-bold mb-5">Members</h1>
           <DataTable columns={columns} data={members as User[]} />
         </div>
       </Dialog>
