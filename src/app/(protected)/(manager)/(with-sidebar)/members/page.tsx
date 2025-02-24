@@ -6,7 +6,7 @@ import { auth } from "@/../auth"
 import { DataTable } from "./data-table"
 import { columns } from "./columns"
 import { User } from "./columns"
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export default async function MembersPage() {
 

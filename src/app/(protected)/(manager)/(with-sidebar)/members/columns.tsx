@@ -102,7 +102,7 @@ export const columns: ColumnDef<User>[] = [
               <div>
                 <Button variant="destructive" onClick={async () => {
                   removeEmployee(user.id);
-                }}>Yes, i'm sure</Button>
+                }}>Yes, i&apos;m sure</Button>
                 <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
               </div>
             </DialogContent>
