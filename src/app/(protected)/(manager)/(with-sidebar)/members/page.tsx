@@ -4,6 +4,10 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { getAuthUser, getUserCompany, listEmployeesForCompany, registerEmployee } from "@/db/actions"
 import { auth } from "@/../auth"
+import { DataTable } from "./data-table"
+import { columns } from "./columns"
+import { User } from "./columns"
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 export default async function MembersPage() {
 
@@ -19,12 +23,12 @@ export default async function MembersPage() {
 
   return (
     <>
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Add an employee</CardTitle>
-          <CardDescription>Add an employee</CardDescription>
-        </CardHeader>
-        <CardContent>
+      {/*TODO UPDATE TO MODAL*/}
+      <Dialog>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+          </DialogHeader>
           <form className="space-y-4" action={handleCreateEmployee}>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -44,22 +48,15 @@ export default async function MembersPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" name="password" type="password" required />
             </div>
-              <Button type="submit" className="w-full">
-                  Sign Up
-              </Button>
+              <Button type="submit">Sign Up</Button>
+              <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
           </form>
-        </CardContent>
-      </Card>
-
-      {members?.map(member => {
-        return (
-          <Card className="w-full max-w-md">
-            <CardHeader>
-              <CardTitle>{member.firstName} {member.lastName}</CardTitle>
-              <CardDescription>{member.email}</CardDescription>
-            </CardHeader>
-          </Card>
-      )})}
+        </DialogContent>
+        <div className="container mx-auto py-10">
+          <h1 className="text-2xl font-bold mb-5">Employees</h1>
+          <DataTable columns={columns} data={members as User[]} />
+        </div>
+      </Dialog>
     </>
   )
 }
