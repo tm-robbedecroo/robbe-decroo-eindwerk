@@ -94,7 +94,7 @@ export default function AppSidebar({ user }: SidebarProps) {
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start"
-                    onClick={() => handleNavigation('/profile-settings')}
+                    onClick={() => handleNavigation('/profile')}
                   >
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Profile Settings</span>
@@ -102,7 +102,7 @@ export default function AppSidebar({ user }: SidebarProps) {
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start"
-                    onClick={() => handleNavigation('/company-settings')}
+                    onClick={() => handleNavigation('/company')}
                   >
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Company Settings</span>
