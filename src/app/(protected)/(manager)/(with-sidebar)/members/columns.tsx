@@ -7,8 +7,8 @@ import { ArrowUpDown } from "lucide-react"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { updateEmployee } from "@/db/actions"
-import { DialogTrigger } from "@radix-ui/react-dialog"
+import { removeEmployee, updateEmployee } from "@/db/actions"
+import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog"
 
 export type User = {
   id: string
@@ -91,9 +91,23 @@ export const columns: ColumnDef<User>[] = [
             </DialogContent>
             <DialogTrigger asChild><Button variant="outline">Edit</Button></DialogTrigger>
           </Dialog>
-          <Button variant="destructive" size="sm" onClick={() => console.log("Remove user", user.id)}>
-            Remove
-          </Button>
+          <Dialog>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you sure you want to remove this user?</DialogTitle>
+              </DialogHeader>
+              <DialogDescription>
+                This action cannot be undone.
+              </DialogDescription>
+              <div>
+                <Button variant="destructive" onClick={async () => {
+                  removeEmployee(user.id);
+                }}>Yes, i'm sure</Button>
+                <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
+              </div>
+            </DialogContent>
+            <DialogTrigger asChild><Button variant="destructive">Remove</Button></DialogTrigger>
+          </Dialog>
         </div>
       )
     },

@@ -44,15 +44,20 @@ export async function registerEmployee(formData: FormData, companyId: string) {
 
 export async function updateEmployee(formData: FormData, employeeId: string) {
     try {
-
-        console.log(formData);
-
         const userInput = {
             email: formData.get("email") as string,
             firstName: formData.get("firstname") as string,
             lastName: formData.get("lastname") as string,
         }
         await db.update(users).set({email: userInput.email, firstName: userInput.firstName, lastName: userInput.lastName}).where(eq(users.id, employeeId));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function removeEmployee(employeeId: string) {
+    try {
+        await db.delete(employees).where(eq(employees.userId, employeeId));
     } catch (error) {
         console.log(error);
     }
