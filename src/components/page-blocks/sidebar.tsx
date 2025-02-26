@@ -21,15 +21,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { signOut } from 'next-auth/react'
+import { CustomUser } from '@/../auth.config'
 
 interface SidebarProps {
-    user: {
-        firstName: string,
-        lastName: string,
-        email: string,
-        role: string,
-        id: string,
-    } | null | undefined;
+    user: CustomUser
 };
 
 export default function AppSidebar({ user }: SidebarProps) {
@@ -81,7 +76,7 @@ export default function AppSidebar({ user }: SidebarProps) {
                 <Button variant="ghost" className="w-full justify-start">
                   <Avatar className="h-8 w-8 mr-2">
                     <AvatarImage src="/avatar.png" alt="User" />
-                    <AvatarFallback>{user?.firstName.charAt(0)}{user?.lastName.charAt(0)}</AvatarFallback>
+                    <AvatarFallback>{user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col items-start">
                     <span className="font-medium">{user?.firstName} {user?.lastName}</span>
