@@ -45,7 +45,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   })
 
   return (
-    <div>
+    <div className="me-4">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."

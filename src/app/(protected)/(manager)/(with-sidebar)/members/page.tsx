@@ -11,7 +11,7 @@ import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@
 export default async function MembersPage() {
 
     const session = await auth();
-    const user = await getAuthUser(session?.user?.email as string);
+    const user = session?.user;
     const company = await getUserCompany(user?.id as string);
     const members = await listEmployeesForCompany(company?.id as string);
 

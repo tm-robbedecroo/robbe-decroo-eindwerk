@@ -43,7 +43,6 @@ export async function registerEmployee(formData: FormData, companyId: string) {
         
     } catch (error) {
         console.log(error);
-        return { success: false, error };
     }
 }
 
