@@ -3,6 +3,7 @@ import { db } from "./client";
 import { companies, users } from "./schema";
 import { eq } from "drizzle-orm";
 import { employees } from "./schema/employee";
+import { revalidateTag } from "next/cache";
 
 // USERS
 export async function registerManager(formData: FormData) {
@@ -39,8 +40,10 @@ export async function registerEmployee(formData: FormData, companyId: string) {
         };
         const [user] = await db.insert(users).values(userInput).returning({id: users.id});
         await db.insert(employees).values({ userId: user.id, companyId });
+        
     } catch (error) {
         console.log(error);
+        return { success: false, error };
     }
 }
 
@@ -52,6 +55,7 @@ export async function updateEmployee(formData: FormData, employeeId: string) {
             lastName: formData.get("lastname") as string,
         }
         await db.update(users).set({email: userInput.email, firstName: userInput.firstName, lastName: userInput.lastName}).where(eq(users.id, employeeId));
+        revalidateTag("users");
     } catch (error) {
         console.log(error);
     }
@@ -60,6 +64,7 @@ export async function updateEmployee(formData: FormData, employeeId: string) {
 export async function removeEmployee(employeeId: string) {
     try {
         await db.delete(employees).where(eq(employees.userId, employeeId));
+        revalidateTag("employees");
     } catch (error) {
         console.log(error);
     }
@@ -72,7 +77,7 @@ export async function listEmployeesForCompany(companyId: string) {
         const members = await Promise.all(
             employeesList.map(async (employee) => {
                 const [user] = await db.select().from(users).where(eq(users.id, employee.userId as string)); 
-                return user; // Niet een array van users, maar een enkel object
+                return user;
             })
         );
         
@@ -106,6 +111,8 @@ export async function updateUserProfile(formData: FormData, userId: string) {
                 updated_at: new Date()
             })
             .where(eq(users.id, userId));
+
+        revalidateTag("users");
     } catch (error) {
         console.log(error);
     }
@@ -122,6 +129,7 @@ export async function createCompany(formData: FormData, userId: string) {
         };
 
         await db.insert(companies).values(companyInput);
+        revalidateTag("companies");
     } catch (error) {
         console.log(error);
     }
@@ -169,6 +177,8 @@ export async function updateCompanyProfile(formData: FormData, companyId: string
         await db.update(companies)
             .set(updateData)
             .where(eq(companies.id, companyId));
+
+        revalidateTag("companies");
     } catch (error) {
         console.log(error);
     }
