@@ -9,5 +9,5 @@ export const users = pgTable("users", {
     password: t.varchar("password").notNull(),
     role: t.varchar("role").notNull(),
     created_at: t.timestamp("created_at").notNull().defaultNow(),
-    updated_at: t.timestamp("updated_at").notNull().defaultNow(),
+    updated_at: t.timestamp("updated_at").notNull(),
 });

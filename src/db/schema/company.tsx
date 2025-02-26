@@ -9,5 +9,5 @@ export const companies = pgTable("companies", {
     imageUrl: t.text("image_url"),
     bannerImageUrl: t.text("banner_image_url"),
     created_at: t.timestamp("created_at").defaultNow(),
-    updated_at: t.timestamp("updated_at").defaultNow(),
+    updated_at: t.timestamp("updated_at"),
 });

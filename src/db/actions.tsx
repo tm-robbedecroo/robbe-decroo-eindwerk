@@ -15,7 +15,8 @@ export async function registerManager(formData: FormData) {
             firstName: firstName as string,
             lastName: lastName as string,
             password: formData.get("password") as string,
-            role: "MANAGER" as string
+            role: "MANAGER" as string,
+            updated_at: new Date()
         };
         await db.insert(users).values(userInput);
     } catch (error) {
@@ -34,6 +35,7 @@ export async function registerEmployee(formData: FormData, companyId: string) {
             lastName: lastName as string,
             password: formData.get("password") as string,
             role: "EMPLOYEE" as string,
+            updated_at: new Date()
         };
         const [user] = await db.insert(users).values(userInput).returning({id: users.id});
         await db.insert(employees).values({ userId: user.id, companyId });
@@ -90,17 +92,36 @@ export async function getAuthUser(email: string) {
     }
 }
 
+export async function updateUserProfile(formData: FormData, userId: string) {
+    try {
+        const firstName = formData.get("firstName");
+        const lastName = formData.get("lastName");
+
+        if (!firstName || !lastName) throw new Error("Required fields are missing");
+
+        await db.update(users)
+            .set({
+                firstName: firstName as string,
+                lastName: lastName as string,
+                updated_at: new Date()
+            })
+            .where(eq(users.id, userId));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // COMPANIES
 export async function createCompany(formData: FormData, userId: string) {
     try {
-
-        const userInput = {
+        const companyInput = {
             name: formData.get("name") as string,
             description: formData.get("description") as string,
-            owner: userId as string
+            owner: userId as string,
+            updated_at: new Date()
         };
 
-        await db.insert(companies).values(userInput);
+        await db.insert(companies).values(companyInput);
     } catch (error) {
         console.log(error);
     }
@@ -110,6 +131,44 @@ export async function getUserCompany(userId: string) {
     try {
         const company = await db.select().from(companies).where(eq(companies.owner, userId));
         return company[0];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function updateCompanyProfile(formData: FormData, companyId: string) {
+    try {
+        const name = formData.get("name");
+        if (!name) throw new Error("Company name is required");
+        
+        type CompanyUpdateData = {
+            name: string;
+            description?: string;
+            imageUrl?: string;
+            bannerImageUrl?: string;
+            updated_at: Date;
+        };
+
+        const updateData: CompanyUpdateData = {
+            name: name as string,
+            updated_at: new Date()
+        };
+
+        // Only add optional fields if they exist in the form data
+        const description = formData.get("description");
+        if (description) updateData.description = description as string;
+        
+
+        const imageUrl = formData.get("imageUrl");
+        if (imageUrl) updateData.imageUrl = imageUrl as string;
+        
+
+        const bannerImageUrl = formData.get("bannerImageUrl");
+        if (bannerImageUrl) updateData.bannerImageUrl = bannerImageUrl as string;
+        
+        await db.update(companies)
+            .set(updateData)
+            .where(eq(companies.id, companyId));
     } catch (error) {
         console.log(error);
     }
