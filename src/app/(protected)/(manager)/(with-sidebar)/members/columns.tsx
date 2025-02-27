@@ -69,23 +69,23 @@ export const columns: ColumnDef<User>[] = [
                 <DialogTitle>Edit member</DialogTitle>
               </DialogHeader>
               <form className="space-y-4" action={async (formData: FormData) => {
-                updateEmployee(formData, user.id);
+                updateEmployee(formData, user?.id);
               }}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstname">First Name</Label>
-                    <Input id="firstname" name="firstname" placeholder="John" defaultValue={user.firstName} required />
+                    <Input id="firstname" name="firstname" placeholder="John" defaultValue={user?.firstName} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastname">Last Name</Label>
-                    <Input id="lastname" name="lastname" placeholder="Doe" defaultValue={user.lastName} required />
+                    <Input id="lastname" name="lastname" placeholder="Doe" defaultValue={user?.lastName} required />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" placeholder="johndoe@example.com" defaultValue={user.email} required />
+                  <Input id="email" name="email" type="email" placeholder="johndoe@example.com" defaultValue={user?.email} required />
                 </div>
-                <Button type="submit">Edit member</Button>
+                <DialogClose asChild><Button type="submit">Edit member</Button></DialogClose>
                 <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
               </form>
             </DialogContent>
@@ -100,9 +100,9 @@ export const columns: ColumnDef<User>[] = [
                 This action cannot be undone.
               </DialogDescription>
               <div>
-                <Button variant="destructive" onClick={async () => {
+                <DialogClose asChild><Button variant="destructive" onClick={async () => {
                   removeEmployee(user.id);
-                }}>Yes, i&apos;m sure</Button>
+                }}>Yes, i&apos;m sure</Button></DialogClose>
                 <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
               </div>
             </DialogContent>

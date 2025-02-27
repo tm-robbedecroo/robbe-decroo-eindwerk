@@ -7,6 +7,7 @@ import { DataTable } from "./data-table"
 import { columns } from "./columns"
 import { User } from "./columns"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { redirect } from "next/navigation"
 
 export default async function MembersPage() {
 
@@ -18,6 +19,7 @@ export default async function MembersPage() {
     const handleCreateEmployee = async (formData: FormData) => {
         "use server";
         registerEmployee(formData, company?.id as string);
+        redirect("/members");
     }
 
   return (
