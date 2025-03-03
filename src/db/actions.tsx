@@ -1,6 +1,6 @@
 "use server";
 import { db } from "./client";
-import { companies, users } from "./schema";
+import { companies, users, events } from "./schema";
 import { eq } from "drizzle-orm";
 import { employees } from "./schema/employee";
 import { revalidateTag } from "next/cache";
@@ -180,5 +180,36 @@ export async function updateCompanyProfile(formData: FormData, companyId: string
         revalidateTag("companies");
     } catch (error) {
         console.log(error);
+    }
+}
+
+// EVENTS
+export async function createEvent(formData: FormData, companyId: string) {
+    try {
+        const eventInput = {
+            companyId,
+            name: formData.get("name") as string,
+            description: formData.get("description") as string,
+            openVotingDate: new Date(formData.get("openVotingDate") as string),
+            closeVotingDate: new Date(formData.get("closeVotingDate") as string),
+            date: new Date(formData.get("date") as string),
+            updated_at: new Date()
+        };
+
+        await db.insert(events).values(eventInput);
+        revalidateTag("events");
+        return { success: true };
+    } catch (error) {
+        console.error("Error creating event:", error);
+        return { success: false, error };
+    }
+}
+
+export async function getEventsForCompany(companyId: string) {
+    try {
+        return await db.select().from(events).where(eq(events.companyId, companyId));
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        return [];
     }
 }
