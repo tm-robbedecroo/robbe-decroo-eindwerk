@@ -15,6 +15,13 @@
       "when": 1741004660477,
       "tag": "0001_overrated_luminals",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1741017470941,
+      "tag": "0002_charming_sugar_man",
+      "breakpoints": true
     }
   ]
 }
