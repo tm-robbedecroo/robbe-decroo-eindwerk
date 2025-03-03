@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 // Add noStore to prevent caching
 import { unstable_noStore as noStore } from 'next/cache';
+import Link from "next/link";
 
 export default async function EventsPage() {
     // Prevent caching
@@ -108,7 +109,7 @@ export default async function EventsPage() {
                             <p>Event Date: {new Date(event.date).toLocaleDateString()}</p>
                         </div>
                         <div className="flex justify-end gap-1">
-                            <Button variant="outline">Edit</Button>
+                            <Button variant="outline"><Link href={`/events/${event.id}`}>Edit</Link></Button>
                             <Dialog>
                                 <DialogContent>
                                     <DialogHeader>
