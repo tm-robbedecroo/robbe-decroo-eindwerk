@@ -8,6 +8,8 @@ import { events } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Plus } from "lucide-react";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface PageProps {
     params: Promise<{ eventId: string }>;
@@ -57,7 +59,24 @@ export default async function EventPage({ params }: PageProps) {
     return (
         <div className="container mx-auto py-10">
             <div className="max-w-2xl mx-auto">
-                <h1 className="text-2xl font-bold mb-6">Edit Event</h1>
+                <div className="flex">
+                    <h1 className="text-2xl font-bold mb-6 inline">Edit Event</h1>
+                    <Dialog>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Are you sure you want to remove this event?</DialogTitle>
+                            </DialogHeader>
+                            <DialogDescription>
+                                This action cannot be undone.
+                            </DialogDescription>
+                            <div>
+                                <DialogClose asChild><Button variant="destructive">Yes, i&apos;m sure</Button></DialogClose>
+                                <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
+                            </div>
+                        </DialogContent>
+                        <DialogTrigger asChild><Button variant="default" className="ms-4"><Plus />Add activity</Button></DialogTrigger>
+                    </Dialog>
+                </div>
                 <form action={handleUpdateEvent} className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="name">Event name</Label>

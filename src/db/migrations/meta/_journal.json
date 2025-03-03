@@ -22,6 +22,13 @@
       "when": 1741017470941,
       "tag": "0002_charming_sugar_man",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1741017755752,
+      "tag": "0003_square_deathstrike",
+      "breakpoints": true
     }
   ]
 }
