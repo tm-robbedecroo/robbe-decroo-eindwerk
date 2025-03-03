@@ -1,9 +1,9 @@
 import { auth } from "@/../auth";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createEvent, getEventsForCompany, getUserCompany } from "@/db/actions";
+import { createEvent, getEventsForCompany, getUserCompany, removeEvent } from "@/db/actions";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { redirect } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
@@ -106,6 +106,27 @@ export default async function EventsPage() {
                         <div className="mt-2 text-sm">
                             <p>Voting: {new Date(event.openVotingDate).toLocaleDateString()} - {new Date(event.closeVotingDate).toLocaleDateString()}</p>
                             <p>Event Date: {new Date(event.date).toLocaleDateString()}</p>
+                        </div>
+                        <div className="flex justify-end gap-1">
+                            <Button variant="outline">Edit</Button>
+                            <Dialog>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Are you sure you want to remove this event?</DialogTitle>
+                                    </DialogHeader>
+                                    <DialogDescription>
+                                        This action cannot be undone.
+                                    </DialogDescription>
+                                    <div>
+                                        <DialogClose asChild><Button variant="destructive" onClick={async () => {
+                                            "use server";
+                                            await removeEvent(event.id);
+                                        }}>Yes, i&apos;m sure</Button></DialogClose>
+                                        <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
+                                    </div>
+                                </DialogContent>
+                                <DialogTrigger asChild><Button variant="destructive">Remove</Button></DialogTrigger>
+                            </Dialog>
                         </div>
                     </div>
                 ))}

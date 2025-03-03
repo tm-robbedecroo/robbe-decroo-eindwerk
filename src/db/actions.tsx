@@ -213,3 +213,12 @@ export async function getEventsForCompany(companyId: string) {
         return [];
     }
 }
+
+export async function removeEvent(eventId: string) {
+    try {
+        await db.delete(events).where(eq(events.id, eventId));
+        revalidateTag("events");
+    } catch (error) {
+        console.log(error);
+    }
+}
