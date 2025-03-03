@@ -109,7 +109,7 @@ export default async function EventsPage() {
                             <p>Event Date: {new Date(event.date).toLocaleDateString()}</p>
                         </div>
                         <div className="flex justify-end gap-1">
-                            <Button variant="outline"><Link href={`/events/${event.id}`}>Edit</Link></Button>
+                            <Link href={`/events/${event.id}`}><Button variant="outline">Edit</Button></Link>
                             <Dialog>
                                 <DialogContent>
                                     <DialogHeader>

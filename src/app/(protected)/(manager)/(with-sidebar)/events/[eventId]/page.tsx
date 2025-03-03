@@ -64,15 +64,61 @@ export default async function EventPage({ params }: PageProps) {
                     <Dialog>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>Are you sure you want to remove this event?</DialogTitle>
+                                <DialogTitle>Add New Activity</DialogTitle>
                             </DialogHeader>
-                            <DialogDescription>
-                                This action cannot be undone.
-                            </DialogDescription>
-                            <div>
-                                <DialogClose asChild><Button variant="destructive">Yes, i&apos;m sure</Button></DialogClose>
-                                <DialogClose asChild><Button variant="ghost" className="ms-2">Cancel</Button></DialogClose>
-                            </div>
+                            <form className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="activityName">Activity Name</Label>
+                                    <Input
+                                        id="activityName"
+                                        name="activityName"
+                                        placeholder="Enter activity name"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="activityDescription">Description</Label>
+                                    <Textarea
+                                        id="activityDescription"
+                                        name="activityDescription"
+                                        placeholder="Enter activity description"
+                                        required
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="openVotingDate">Open Voting Date</Label>
+                                        <Input
+                                            id="openVotingDate"
+                                            name="openVotingDate"
+                                            type="datetime-local"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="closeVotingDate">Close Voting Date</Label>
+                                        <Input
+                                            id="closeVotingDate"
+                                            name="closeVotingDate"
+                                            type="datetime-local"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="activityDate">Activity Date & Time</Label>
+                                    <Input
+                                        id="activityDate"
+                                        name="activityDate"
+                                        type="datetime-local"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex justify-end gap-2">
+                                    <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                                    <Button type="submit">Create Activity</Button>
+                                </div>
+                            </form>
                         </DialogContent>
                         <DialogTrigger asChild><Button variant="default" className="ms-4"><Plus />Add activity</Button></DialogTrigger>
                     </Dialog>
