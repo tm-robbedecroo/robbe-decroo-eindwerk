@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getAuthUser, getUserCompany, listEmployeesForCompany, registerEmployee } from "@/db/actions"
+import { getUserCompany, listEmployeesForCompany, registerEmployee } from "@/db/actions"
 import { auth } from "@/../auth"
 import { DataTable } from "./data-table"
 import { columns } from "./columns"
