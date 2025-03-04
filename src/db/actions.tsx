@@ -1,6 +1,6 @@
 "use server";
 import { db } from "./client";
-import { companies, users, events } from "./schema";
+import { companies, users, events, activities } from "./schema";
 import { eq } from "drizzle-orm";
 import { employees } from "./schema/employee";
 import { revalidateTag } from "next/cache";
@@ -218,6 +218,24 @@ export async function removeEvent(eventId: string) {
     try {
         await db.delete(events).where(eq(events.id, eventId));
         revalidateTag("events");
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// activities
+export async function createActivity(formData: FormData, eventId: string) {
+    try {
+        const activityInput = {
+            eventId: eventId as string,
+            name: formData.get("name") as string,
+            description: formData.get("description") as string,
+            imageUrl: 'url',
+            price: '100',
+            updated_at: new Date()
+        };
+
+        await db.insert(activities).values(activityInput);
     } catch (error) {
         console.log(error);
     }

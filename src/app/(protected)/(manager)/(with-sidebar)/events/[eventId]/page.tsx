@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { createActivity } from "@/db/actions";
 
 interface PageProps {
     params: Promise<{ eventId: string }>;
@@ -66,12 +67,15 @@ export default async function EventPage({ params }: PageProps) {
                             <DialogHeader>
                                 <DialogTitle>Add New Activity</DialogTitle>
                             </DialogHeader>
-                            <form className="space-y-4">
+                            <form className="space-y-4" action={async (formData: FormData) => {
+                                'use server';
+                                createActivity(formData, eventId);
+                            }}>
                                 <div className="space-y-2">
                                     <Label htmlFor="activityName">Activity Name</Label>
                                     <Input
-                                        id="activityName"
-                                        name="activityName"
+                                        id="name"
+                                        name="name"
                                         placeholder="Enter activity name"
                                         required
                                     />
@@ -79,38 +83,9 @@ export default async function EventPage({ params }: PageProps) {
                                 <div className="space-y-2">
                                     <Label htmlFor="activityDescription">Description</Label>
                                     <Textarea
-                                        id="activityDescription"
-                                        name="activityDescription"
+                                        id="description"
+                                        name="description"
                                         placeholder="Enter activity description"
-                                        required
-                                    />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="openVotingDate">Open Voting Date</Label>
-                                        <Input
-                                            id="openVotingDate"
-                                            name="openVotingDate"
-                                            type="datetime-local"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="closeVotingDate">Close Voting Date</Label>
-                                        <Input
-                                            id="closeVotingDate"
-                                            name="closeVotingDate"
-                                            type="datetime-local"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="activityDate">Activity Date & Time</Label>
-                                    <Input
-                                        id="activityDate"
-                                        name="activityDate"
-                                        type="datetime-local"
                                         required
                                     />
                                 </div>
