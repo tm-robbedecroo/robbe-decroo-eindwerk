@@ -4,7 +4,6 @@ import { companies, users, events, activities } from "./schema";
 import { eq } from "drizzle-orm";
 import { employees } from "./schema/employee";
 import { revalidateTag } from "next/cache";
-import { redirect } from "next/dist/server/api-utils";
 
 // USERS
 export async function registerManager(formData: FormData) {
