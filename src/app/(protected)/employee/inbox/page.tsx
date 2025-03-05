@@ -4,6 +4,7 @@ import { activities } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar, Clock } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default async function EmployeeInboxPage() {
     const events = await getOpenForVotingEvents()
@@ -67,6 +68,7 @@ export default async function EmployeeInboxPage() {
                                     )}
                                 </div>
                             </div>
+                            <Button className="mt-2">Vote</Button>
                         </CardContent>
                     </Card>
                 ))}
