@@ -142,19 +142,19 @@ export function EmployeeSidebar({ user }: SidebarProps) {
         <SidebarContent className="p-4">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => handleNavigation('/events')}>
+              <SidebarMenuButton onClick={() => handleNavigation('/employee/events')}>
                 <Calendar className="mr-2 h-4 w-4" />
                 <span>Upcoming Events</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => handleNavigation('/inbox')}>
+              <SidebarMenuButton onClick={() => handleNavigation('/employee/inbox')}>
                 <MessageSquare className="mr-2 h-4 w-4" />
                 <span>Inbox</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => handleNavigation('/profile')}>
+              <SidebarMenuButton onClick={() => handleNavigation('/employee/profile')}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Manage Profile</span>
               </SidebarMenuButton>

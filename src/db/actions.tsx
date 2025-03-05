@@ -1,9 +1,10 @@
 "use server";
 import { db } from "./client";
 import { companies, users, events, activities } from "./schema";
-import { eq } from "drizzle-orm";
+import { eq, gte, lte, gt } from "drizzle-orm";
 import { employees } from "./schema/employee";
 import { revalidateTag } from "next/cache";
+import { and } from "drizzle-orm";
 
 // USERS
 export async function registerManager(formData: FormData) {
@@ -220,6 +221,23 @@ export async function removeEvent(eventId: string) {
         revalidateTag("events");
     } catch (error) {
         console.log(error);
+    }
+}
+
+export async function getOpenForVotingEvents() {
+    try {
+        const now = new Date();
+        return await db.select()
+            .from(events)
+            .where(
+                and(
+                    lte(events.openVotingDate, now),
+                    gt(events.closeVotingDate, now)
+                )
+            );
+    } catch (error) {
+        console.error("Error fetching open voting events:", error);
+        return [];
     }
 }
 
