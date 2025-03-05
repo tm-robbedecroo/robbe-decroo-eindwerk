@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default async function EmployeeInboxPage() {
     const events = await getOpenForVotingEvents()
@@ -68,7 +69,7 @@ export default async function EmployeeInboxPage() {
                                     )}
                                 </div>
                             </div>
-                            <Button className="mt-2">Vote</Button>
+                            <Link href={'/employee/vote/' + event.id}><Button className="mt-2">Vote</Button></Link>
                         </CardContent>
                     </Card>
                 ))}
