@@ -13,6 +13,9 @@ export default async function RootLayout({
     const session = await auth();
 
     if(!session?.user) redirect('/login');
+    
+    const user = await getAuthUser(session?.user?.email as string);
+    if(user?.role !== "EMPLOYEE") redirect('/dashboard');
 
     return (
         <SidebarProvider>

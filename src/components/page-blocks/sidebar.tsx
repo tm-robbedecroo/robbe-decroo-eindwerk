@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronDown, LayoutDashboard, Calendar, Users, Settings, LogOut } from 'lucide-react'
+import { ChevronDown, LayoutDashboard, Calendar, Users, Settings, LogOut, MessageSquare, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 import {
@@ -142,21 +142,21 @@ export function EmployeeSidebar({ user }: SidebarProps) {
         <SidebarContent className="p-4">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => handleNavigation('/dashboard')}>
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
               <SidebarMenuButton onClick={() => handleNavigation('/events')}>
                 <Calendar className="mr-2 h-4 w-4" />
-                <span>Events</span>
+                <span>Upcoming Events</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => handleNavigation('/members')}>
-                <Users className="mr-2 h-4 w-4" />
-                <span>Members</span>
+              <SidebarMenuButton onClick={() => handleNavigation('/inbox')}>
+                <MessageSquare className="mr-2 h-4 w-4" />
+                <span>Inbox</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => handleNavigation('/profile')}>
+                <User className="mr-2 h-4 w-4" />
+                <span>Manage Profile</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -179,22 +179,6 @@ export function EmployeeSidebar({ user }: SidebarProps) {
               <div className="grid gap-1">
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start"
-                  onClick={() => handleNavigation('/profile')}
-                >
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Profile Settings</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start"
-                  onClick={() => handleNavigation('/company')}
-                >
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Company Settings</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
                   className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-100"
                   onClick={handleLogout}
                 >
@@ -207,5 +191,5 @@ export function EmployeeSidebar({ user }: SidebarProps) {
         </SidebarFooter>
       </Sidebar>
     </>
-)
+  )
 }
