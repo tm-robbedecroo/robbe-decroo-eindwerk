@@ -6,7 +6,7 @@ import { unstable_noStore as noStore, revalidateTag } from 'next/cache';
 import { db } from "@/db/client";
 import { events } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Plus, Trash2 } from "lucide-react";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
