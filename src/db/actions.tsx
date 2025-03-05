@@ -1,7 +1,7 @@
 "use server";
 import { db } from "./client";
 import { companies, users, events, activities } from "./schema";
-import { eq, gte, lte, gt } from "drizzle-orm";
+import { eq, lte, gt } from "drizzle-orm";
 import { employees } from "./schema/employee";
 import { revalidateTag } from "next/cache";
 import { and } from "drizzle-orm";

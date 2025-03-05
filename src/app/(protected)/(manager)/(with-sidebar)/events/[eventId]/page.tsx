@@ -202,7 +202,7 @@ export default async function EventPage({ params }: PageProps) {
                                             <DialogHeader>
                                                 <DialogTitle>Delete Activity</DialogTitle>
                                                 <DialogDescription>
-                                                    Are you sure you want to delete "{activity.name}"? This action cannot be undone.
+                                                    Are you sure you want to delete &quot;{activity.name}&quot;? This action cannot be undone.
                                                 </DialogDescription>
                                             </DialogHeader>
                                             <div className="flex justify-end gap-2">
@@ -225,7 +225,7 @@ export default async function EventPage({ params }: PageProps) {
                         ))}
                         {eventActivities.length === 0 && (
                             <div className="text-center text-gray-500 py-8">
-                                No activities yet. Click "Add Activity" to create one.
+                                No activities yet. Click &quot;Add Activity&quot; to create one.
                             </div>
                         )}
                     </div>
