@@ -9,12 +9,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
 interface PageProps {
-    params: { eventId: string };
+    params: Promise<{ eventId: string }>;
 }
 
 export default async function VotePage({ params }: PageProps) {
     // Fetch event details
-    const [event] = await db.select().from(events).where(eq(events.id, params.eventId));
+    const { eventId } = await params;
+    const [event] = await db.select().from(events).where(eq(events.id, eventId));
     
     if (!event) {
         notFound();
@@ -23,7 +24,7 @@ export default async function VotePage({ params }: PageProps) {
     // Fetch activities for this event
     const eventActivities = await db.select()
         .from(activities)
-        .where(eq(activities.eventId, params.eventId));
+        .where(eq(activities.eventId, eventId));
 
     const handleVoteSubmission = async (formData: FormData) => {
         'use server';
