@@ -4,6 +4,7 @@ import { companies, users, events, activities } from "./schema";
 import { eq } from "drizzle-orm";
 import { employees } from "./schema/employee";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/dist/server/api-utils";
 
 // USERS
 export async function registerManager(formData: FormData) {
@@ -238,5 +239,17 @@ export async function createActivity(formData: FormData, eventId: string) {
         await db.insert(activities).values(activityInput);
     } catch (error) {
         console.log(error);
+    }
+}
+
+export async function deleteActivity(activityId: string) {
+    'use server';
+    try {
+        await db.delete(activities).where(eq(activities.id, activityId));
+        revalidateTag("activities");
+        return { success: true };
+    } catch (error) {
+        console.error("Error deleting activity:", error);
+        return { success: false, error };
     }
 }
