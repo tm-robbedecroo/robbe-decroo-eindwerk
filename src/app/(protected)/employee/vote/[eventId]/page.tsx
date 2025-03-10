@@ -49,8 +49,8 @@ export default async function VotePage({ params }: PageProps) {
             if(!session.user) return;
             await submitVote(eventId, activityId, session.user.id as string);
             revalidatePath('/employee/inbox');
-        } catch (error: any) {
-            throw new Error(error.message || "Failed to submit vote");
+        } catch (error) {
+            throw new Error("Failed to submit vote");
         }
     };
 

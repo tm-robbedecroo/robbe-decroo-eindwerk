@@ -1,7 +1,7 @@
 import { auth } from "@/../auth";
 import { getUpcomingEventsNeedingVote } from "@/db/actions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Clock, Vote } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
