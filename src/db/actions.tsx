@@ -224,17 +224,44 @@ export async function removeEvent(eventId: string) {
     }
 }
 
-export async function getOpenForVotingEvents() {
+export async function getOpenForVotingEvents(userId: string) {
     try {
         const now = new Date();
-        return await db.select()
+
+        // First get the user's company
+        const [employee] = await db.select()
+            .from(employees)
+            .where(eq(employees.userId, userId));
+
+        if (!employee?.companyId) {
+            throw new Error("Employee not found or has no company");
+        }
+
+        // Get all currently open events for the company
+        const openEvents = await db.select()
             .from(events)
             .where(
                 and(
+                    eq(events.companyId, employee.companyId),
                     lte(events.openVotingDate, now),
                     gt(events.closeVotingDate, now)
                 )
             );
+
+        // Get all votes by this user
+        const userVotes = await db.select()
+            .from(votes)
+            .where(eq(votes.userId, userId));
+
+        // Filter out events the user has already voted on
+        const eventsNeedingVote = openEvents.filter(event => 
+            !userVotes.some(vote => vote.eventId === event.id)
+        );
+
+        // Sort events by closing date (soonest first)
+        return eventsNeedingVote.sort((a, b) => 
+            new Date(a.closeVotingDate).getTime() - new Date(b.closeVotingDate).getTime()
+        );
     } catch (error) {
         console.error("Error fetching open voting events:", error);
         return [];
@@ -347,6 +374,51 @@ export async function submitVote(eventId: string, activityId: string, userId: st
     } catch (error) {
         console.error("Error submitting vote:", error);
         throw error;
+    }
+}
+
+export async function getUpcomingEventsNeedingVote(userId: string) {
+    try {
+        // First get the user's company
+        const [employee] = await db.select()
+            .from(employees)
+            .where(eq(employees.userId, userId));
+
+        if (!employee?.companyId) {
+            throw new Error("Employee not found or has no company");
+        }
+
+        const now = new Date();
+
+        // Get all events for the company that are either:
+        // - Currently open for voting
+        // - Will be open for voting in the future
+        const upcomingEvents = await db.select()
+            .from(events)
+            .where(
+                and(
+                    eq(events.companyId, employee.companyId),
+                    gt(events.closeVotingDate, now)
+                )
+            );
+
+        // Get all votes by this user
+        const userVotes = await db.select()
+            .from(votes)
+            .where(eq(votes.userId, userId));
+
+        // Filter out events the user has already voted on
+        const eventsNeedingVote = upcomingEvents.filter(event => 
+            userVotes.some(vote => vote.eventId === event.id)
+        );
+
+        // Sort events by openVotingDate
+        return eventsNeedingVote.sort((a, b) => 
+            new Date(a.openVotingDate).getTime() - new Date(b.openVotingDate).getTime()
+        );
+    } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        return [];
     }
 }
 

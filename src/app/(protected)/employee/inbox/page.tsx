@@ -6,9 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calendar, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { auth } from "@/../auth"
+import { redirect } from "next/navigation"
 
 export default async function EmployeeInboxPage() {
-    const events = await getOpenForVotingEvents()
+    const session = await auth();
+    if (!session?.user?.id) {
+        redirect('/login');
+    }
+
+    const events = await getOpenForVotingEvents(session.user.id);
 
     // Fetch activities for each event
     const eventsWithActivities = await Promise.all(
