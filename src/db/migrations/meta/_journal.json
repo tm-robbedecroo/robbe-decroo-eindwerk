@@ -29,6 +29,13 @@
       "when": 1741017755752,
       "tag": "0003_square_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1741618887105,
+      "tag": "0004_rainy_miracleman",
+      "breakpoints": true
     }
   ]
 }

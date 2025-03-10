@@ -1,6 +1,6 @@
 "use server";
 import { db } from "./client";
-import { companies, users, events, activities } from "./schema";
+import { companies, users, events, activities, votes } from "./schema";
 import { eq, lte, gt } from "drizzle-orm";
 import { employees } from "./schema/employee";
 import { revalidateTag } from "next/cache";
@@ -270,3 +270,83 @@ export async function deleteActivity(activityId: string) {
         return { success: false, error };
     }
 }
+
+/* VOTES */
+export async function getUserVoteForEvent(eventId: string, userId: string) {
+    try {
+        const [vote] = await db.select()
+            .from(votes)
+            .where(
+                and(
+                    eq(votes.eventId, eventId),
+                    eq(votes.userId, userId)
+                )
+            );
+        return vote;
+    } catch (error) {
+        console.error("Error fetching user vote:", error);
+        return null;
+    }
+}
+
+export async function submitVote(eventId: string, activityId: string, userId: string) {
+    try {
+        const now = new Date();
+        
+        // Check if voting is still open
+        const [event] = await db.select()
+            .from(events)
+            .where(eq(events.id, eventId));
+            
+        if (!event) {
+            throw new Error("Event not found");
+        }
+        
+        if (new Date(event.closeVotingDate) < now) {
+            throw new Error("Voting is closed for this event");
+        }
+        
+        if (new Date(event.openVotingDate) > now) {
+            throw new Error("Voting has not started for this event");
+        }
+        
+        // Check if user has already voted
+        const existingVote = await db.select()
+            .from(votes)
+            .where(
+                and(
+                    eq(votes.eventId, eventId),
+                    eq(votes.userId, userId)
+                )
+            );
+            
+        if (existingVote.length > 0) {
+            // Update existing vote
+            await db.update(votes)
+                .set({
+                    activityId,
+                    updated_at: now
+                })
+                .where(
+                    and(
+                        eq(votes.eventId, eventId),
+                        eq(votes.userId, userId)
+                    )
+                );
+        } else {
+            // Submit new vote
+            await db.insert(votes).values({
+                eventId,
+                userId,
+                activityId,
+                updated_at: now
+            });
+        }
+        
+        return { success: true };
+    } catch (error) {
+        console.error("Error submitting vote:", error);
+        throw error;
+    }
+}
+
