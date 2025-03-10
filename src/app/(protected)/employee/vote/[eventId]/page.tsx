@@ -50,7 +50,7 @@ export default async function VotePage({ params }: PageProps) {
             await submitVote(eventId, activityId, session.user.id as string);
             revalidatePath('/employee/inbox');
         } catch (error) {
-            throw new Error("Failed to submit vote");
+            console.log(error);
         }
     };
 
