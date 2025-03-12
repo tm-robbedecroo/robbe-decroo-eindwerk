@@ -513,7 +513,7 @@ export async function getEventParticipation(eventId: string) {
             companyEmployees.map(async (employee) => {
                 const [user] = await db.select()
                     .from(users)
-                    .where(eq(users.id, employee.userId));
+                    .where(eq(users.id, employee.userId as string));
 
                 const hasVoted = eventVotes.some(vote => vote.userId === employee.userId);
                 const vote = hasVoted ? eventVotes.find(v => v.userId === employee.userId) : null;
