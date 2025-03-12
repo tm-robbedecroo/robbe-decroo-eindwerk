@@ -1,5 +1,3 @@
-import { auth } from "@/../auth";
-import { redirect } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getEventWithActivities, getEventVoteStatistics, getEventParticipation } from "@/db/actions";
 import { Progress } from "@/components/ui/progress";
@@ -30,7 +28,6 @@ interface ParticipationMember {
 }
 
 export default async function EventOverviewPage({ params }: PageProps) {
-    const session = await auth();
 
     const { eventId } = params;
 
