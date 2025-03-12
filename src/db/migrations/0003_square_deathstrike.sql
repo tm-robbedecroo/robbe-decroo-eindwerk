@@ -1,1 +1,0 @@
-ALTER TABLE "activities" ADD COLUMN "event_id" uuid NOT NULL;

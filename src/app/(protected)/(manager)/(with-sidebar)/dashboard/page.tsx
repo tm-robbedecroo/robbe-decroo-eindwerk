@@ -8,11 +8,8 @@ import Link from "next/link";
 
 export default async function DashboardPage() {
     const session = await auth();
-    if (!session?.user?.id) {
-        redirect('/login');
-    }
 
-    const company = await getUserCompany(session.user.id);
+    const company = await getUserCompany(session?.user?.id as string);
     if (!company) {
         redirect('/create-company');
     }

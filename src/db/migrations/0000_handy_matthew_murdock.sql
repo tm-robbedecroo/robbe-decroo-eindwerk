@@ -1,3 +1,14 @@
+CREATE TABLE "activities" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"event_id" uuid NOT NULL,
+	"name" text NOT NULL,
+	"description" text,
+	"image_url" text,
+	"price" text,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp
+);
+--> statement-breakpoint
 CREATE TABLE "companies" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
@@ -10,6 +21,7 @@ CREATE TABLE "companies" (
 );
 --> statement-breakpoint
 CREATE TABLE "employees" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid,
 	"company_id" uuid
 );
@@ -36,4 +48,13 @@ CREATE TABLE "users" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
+);
+--> statement-breakpoint
+CREATE TABLE "votes" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"event_id" varchar NOT NULL,
+	"user_id" varchar NOT NULL,
+	"activity_id" varchar NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp NOT NULL
 );

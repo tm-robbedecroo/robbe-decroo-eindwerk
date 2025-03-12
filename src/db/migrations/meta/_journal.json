@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1741004615010,
-      "tag": "0000_nasty_karnak",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1741004660477,
-      "tag": "0001_overrated_luminals",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1741017470941,
-      "tag": "0002_charming_sugar_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1741017755752,
-      "tag": "0003_square_deathstrike",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1741618887105,
-      "tag": "0004_rainy_miracleman",
+      "when": 1741816637100,
+      "tag": "0000_handy_matthew_murdock",
       "breakpoints": true
     }
   ]

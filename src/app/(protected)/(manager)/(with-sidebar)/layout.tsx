@@ -11,15 +11,12 @@ export default async function RootLayout({
   }>) {
 
     const session = await auth();
-    const company = await getUserCompany(session?.user?.id as string);
 
     if(!session?.user) redirect("/login");
 
     const user = await getAuthUser(session?.user?.email as string);
     const role = user?.role;
     
-
-    if(!company && role === "MANAGER") redirect("/create-company");
     if(role === "EMPLOYEE") redirect('/employee/dashboard')
 
     return (
