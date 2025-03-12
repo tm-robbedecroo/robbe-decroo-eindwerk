@@ -422,3 +422,120 @@ export async function getUpcomingEventsNeedingVote(userId: string) {
     }
 }
 
+export async function getUpcomingEventsForCompany(companyId: string) {
+    try {
+        const now = new Date();
+        return await db.select()
+            .from(events)
+            .where(
+                and(
+                    eq(events.companyId, companyId),
+                    gt(events.date, now)
+                )
+            )
+            .orderBy(events.date);
+    } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        return [];
+    }
+}
+
+export async function getEventWithActivities(eventId: string) {
+    try {
+        const [event] = await db.select()
+            .from(events)
+            .where(eq(events.id, eventId));
+
+        if (!event) {
+            throw new Error("Event not found");
+        }
+
+        const eventActivities = await db.select()
+            .from(activities)
+            .where(eq(activities.eventId, eventId));
+
+        return { ...event, activities: eventActivities };
+    } catch (error) {
+        console.error("Error fetching event details:", error);
+        throw error;
+    }
+}
+
+export async function getEventVoteStatistics(eventId: string) {
+    try {
+        // Get all votes for this event
+        const eventVotes = await db.select()
+            .from(votes)
+            .where(eq(votes.eventId, eventId));
+
+        // Get all activities for this event
+        const eventActivities = await db.select()
+            .from(activities)
+            .where(eq(activities.eventId, eventId));
+
+        // Calculate votes per activity
+        const votesByActivity = eventActivities.map(activity => ({
+            ...activity,
+            voteCount: eventVotes.filter(vote => vote.activityId === activity.id).length
+        }));
+
+        // Sort by vote count descending
+        return votesByActivity.sort((a, b) => b.voteCount - a.voteCount);
+    } catch (error) {
+        console.error("Error fetching vote statistics:", error);
+        throw error;
+    }
+}
+
+export async function getEventParticipation(eventId: string) {
+    try {
+        // First get the event to get the company ID
+        const [event] = await db.select()
+            .from(events)
+            .where(eq(events.id, eventId));
+
+        if (!event) {
+            throw new Error("Event not found");
+        }
+
+        // Get all employees for this company
+        const companyEmployees = await db.select()
+            .from(employees)
+            .where(eq(employees.companyId, event.companyId));
+
+        // Get all votes for this event
+        const eventVotes = await db.select()
+            .from(votes)
+            .where(eq(votes.eventId, eventId));
+
+        // Get user details for all employees
+        const employeeParticipation = await Promise.all(
+            companyEmployees.map(async (employee) => {
+                const [user] = await db.select()
+                    .from(users)
+                    .where(eq(users.id, employee.userId));
+
+                const hasVoted = eventVotes.some(vote => vote.userId === employee.userId);
+                const vote = hasVoted ? eventVotes.find(v => v.userId === employee.userId) : null;
+
+                return {
+                    ...user,
+                    hasVoted,
+                    voteDate: vote?.created_at,
+                };
+            })
+        );
+
+        // Sort by those who haven't voted first, then by name
+        return employeeParticipation.sort((a, b) => {
+            if (a.hasVoted === b.hasVoted) {
+                return `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`);
+            }
+            return a.hasVoted ? 1 : -1;
+        });
+    } catch (error) {
+        console.error("Error fetching participation data:", error);
+        throw error;
+    }
+}
+
