@@ -31,9 +31,6 @@ interface ParticipationMember {
 
 export default async function EventOverviewPage({ params }: PageProps) {
     const session = await auth();
-    if (!session?.user?.id) {
-        redirect('/login');
-    }
 
     const { eventId } = params;
 
@@ -143,6 +140,7 @@ export default async function EventOverviewPage({ params }: PageProps) {
             </div>
         );
     } catch (error) {
+        console.log(error);
         return (
             <div className="container mx-auto py-10">
                 <Card>

@@ -1,4 +1,4 @@
-import { getAuthUser, getUserCompany, getUpcomingEventsForCompany } from "@/db/actions";
+import { getUserCompany, getUpcomingEventsForCompany } from "@/db/actions";
 import { auth } from "@/../auth";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,7 +21,7 @@ export default async function DashboardPage() {
 
     return (
         <div className="container mx-auto py-10">
-            <h1 className="text-2xl font-bold mb-5">{company.name}'s dashboard</h1>
+            <h1 className="text-2xl font-bold mb-5">{company.name}&apos;s dashboard</h1>
             
             <div className="mb-8">
                 <h2 className="text-xl font-semibold mb-4">Upcoming Events</h2>
