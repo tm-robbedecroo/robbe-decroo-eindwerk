@@ -6,9 +6,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface PageProps {
-    params: {
-        eventId: string;
-    };
+    params: Promise<{ eventId: string }>;
 }
 
 interface ActivityWithVotes {
@@ -29,7 +27,7 @@ interface ParticipationMember {
 
 export default async function EventOverviewPage({ params }: PageProps) {
 
-    const { eventId } = params;
+    const { eventId } = await params;
 
     try {
         const event = await getEventWithActivities(eventId);
