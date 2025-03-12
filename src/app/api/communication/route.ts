@@ -1,18 +1,24 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import nodemailer from "nodemailer";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method Not Allowed" });
-    }
-
-    const { to, subject, text } = req.body;
-
-    if (!to || !subject || !text) {
-        return res.status(400).json({ error: "Missing required fields" });
-    }
-
+export async function GET(request: NextRequest) {
     try {
+        return NextResponse.json({ message: "Communication endpoint is working" });
+    } catch (error) {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+}
+
+export async function POST(request: NextRequest) {
+    try {
+        const body = await request.json();
+        const { to, subject, text } = body;
+
+        if (!to || !subject || !text) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
+
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -29,9 +35,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         };
 
         await transporter.sendMail(mailOptions);
-        return res.status(200).json({ success: true, message: "Email sent successfully!" });
+        return NextResponse.json({ success: true, message: "Email sent successfully!" });
     } catch (error) {
         console.error("Email error:", error);
-        return res.status(500).json({ error: "Email sending failed" });
+        return NextResponse.json({ error: "Email sending failed" }, { status: 500 });
     }
 }
