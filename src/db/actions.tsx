@@ -539,3 +539,79 @@ export async function getEventParticipation(eventId: string) {
     }
 }
 
+export async function selectEventWinner(eventId: string, activityId: string) {
+    try {
+        // Get event details
+        const [event] = await db.select()
+            .from(events)
+            .where(eq(events.id, eventId));
+
+        if (!event) {
+            throw new Error("Event not found");
+        }
+
+        // Get winning activity details
+        const [activity] = await db.select()
+            .from(activities)
+            .where(eq(activities.id, activityId));
+
+        if (!activity) {
+            throw new Error("Activity not found");
+        }
+
+        // Get all votes for this event with user details
+        const eventVotes = await db.select()
+            .from(votes)
+            .leftJoin(users, eq(votes.userId, users.id))
+            .where(eq(votes.eventId, eventId));
+
+        // Send emails to all voters
+        const emailPromises = eventVotes.map(async ({ users: user }) => {
+            if (!user) return; // Skip if no user data
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/communication`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    to: user.email,
+                    subject: `Activity Selected for ${event.name}`,
+                    text: `Dear ${user.firstName},
+
+The activity for "${event.name}" has been selected!
+
+Selected Activity: ${activity.name}
+Description: ${activity.description || 'No description provided'}
+Date: ${new Date(event.date).toLocaleDateString()}
+
+Thank you for participating in the voting process.
+
+Best regards,
+Your Company`
+                }),
+            });
+
+            if (!response.ok) {
+                console.error(`Failed to send email to ${user.email}`);
+            }
+        });
+
+        await Promise.all(emailPromises);
+
+        // Update event with selected activity
+        await db.update(events)
+            .set({ 
+                selectedActivityId: activityId,
+                updated_at: new Date()
+            })
+            .where(eq(events.id, eventId));
+
+        revalidateTag("events");
+        return { success: true };
+    } catch (error) {
+        console.error("Error selecting event winner:", error);
+        throw error;
+    }
+}
+

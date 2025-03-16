@@ -1,9 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getEventWithActivities, getEventVoteStatistics, getEventParticipation } from "@/db/actions";
+import { getEventWithActivities, getEventVoteStatistics, getEventParticipation, selectEventWinner } from "@/db/actions";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { SelectWinnerDialog } from "./select-winner-dialog";
+import { revalidatePath } from "next/cache";
 
 interface PageProps {
     params: Promise<{ eventId: string }>;
@@ -26,7 +28,6 @@ interface ParticipationMember {
 }
 
 export default async function EventOverviewPage({ params }: PageProps) {
-
     const { eventId } = await params;
 
     try {
@@ -37,9 +38,25 @@ export default async function EventOverviewPage({ params }: PageProps) {
         const totalVotes = voteStats.reduce((sum: number, activity: ActivityWithVotes) => sum + activity.voteCount, 0);
         const participationRate = (participation.filter(p => p.hasVoted).length / participation.length) * 100;
 
+        const handleWinnerSelection = async (activityId: string) => {
+            'use server';
+            await selectEventWinner(eventId, activityId);
+            revalidatePath(`/events/${eventId}/overview`);
+        };
+
         return (
             <div className="container mx-auto py-10">
-                <h1 className="text-2xl font-bold mb-6">{event.name} Overview</h1>
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl font-bold">{event.name} Overview</h1>
+                    {!event.selectedActivityId && (
+                        <SelectWinnerDialog
+                            activities={voteStats}
+                            totalVotes={totalVotes}
+                            participationRate={participationRate}
+                            onSelectWinner={handleWinnerSelection}
+                        />
+                    )}
+                </div>
                 
                 {/* Event Details */}
                 <Card className="mb-8">
@@ -71,9 +88,14 @@ export default async function EventOverviewPage({ params }: PageProps) {
                     <CardContent className="pt-6">
                         <div className="space-y-4">
                             {voteStats.map((activity) => (
-                                <div key={activity.id}>
+                                <div key={activity.id} className="space-y-2">
                                     <div className="flex justify-between mb-2">
-                                        <span className="text-sm font-medium">{activity.name}</span>
+                                        <span className="text-sm font-medium">
+                                            {activity.name}
+                                            {event.selectedActivityId === activity.id && (
+                                                <Badge variant="success" className="ml-2">Winner</Badge>
+                                            )}
+                                        </span>
                                         <span className="text-sm text-muted-foreground">
                                             {activity.voteCount} votes ({totalVotes ? Math.round((activity.voteCount / totalVotes) * 100) : 0}%)
                                         </span>

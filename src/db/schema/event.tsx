@@ -1,5 +1,6 @@
 import { pgTable } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
+import { activities } from "./activity";
 
 export const events = pgTable("events", {
     id: t.uuid("id").primaryKey().defaultRandom(),
@@ -9,6 +10,7 @@ export const events = pgTable("events", {
     openVotingDate: t.timestamp("open_voting_date").notNull(),
     closeVotingDate: t.timestamp("close_voting_date").notNull(),
     date: t.timestamp("date").notNull(),
+    selectedActivityId: t.uuid("selected_activity_id").references(() => activities.id),
     created_at: t.timestamp("created_at").notNull().defaultNow(),
     updated_at: t.timestamp("updated_at").notNull(),
 });
