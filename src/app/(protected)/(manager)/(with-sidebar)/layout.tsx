@@ -1,6 +1,6 @@
 import AppSidebar from "@/components/page-blocks/sidebar";
 import { auth } from "@/../auth";
-import { getAuthUser, getUserCompany } from "@/db/actions";
+import { getAuthUser } from "@/db/actions";
 import { redirect } from "next/navigation";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { CustomUser } from "@/../auth.config";
