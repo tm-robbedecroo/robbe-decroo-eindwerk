@@ -508,6 +508,11 @@ export async function getEventParticipation(eventId: string) {
             .from(votes)
             .where(eq(votes.eventId, eventId));
 
+        // Get all activities for this event
+        const eventActivities = await db.select()
+            .from(activities)
+            .where(eq(activities.eventId, eventId));
+
         // Get user details for all employees
         const employeeParticipation = await Promise.all(
             companyEmployees.map(async (employee) => {
@@ -517,11 +522,14 @@ export async function getEventParticipation(eventId: string) {
 
                 const hasVoted = eventVotes.some(vote => vote.userId === employee.userId);
                 const vote = hasVoted ? eventVotes.find(v => v.userId === employee.userId) : null;
+                const votedActivity = vote ? eventActivities.find(a => a.id === vote.activityId) : null;
 
                 return {
                     ...user,
                     hasVoted,
                     voteDate: vote?.created_at,
+                    votedActivityId: votedActivity?.id,
+                    votedActivityName: votedActivity?.name,
                 };
             })
         );

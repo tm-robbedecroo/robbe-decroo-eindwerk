@@ -25,6 +25,8 @@ interface ParticipationMember {
     email: string;
     hasVoted: boolean;
     voteDate?: Date;
+    votedActivityId?: string;
+    votedActivityName?: string;
 }
 
 export default async function EventOverviewPage({ params }: PageProps) {
@@ -57,103 +59,108 @@ export default async function EventOverviewPage({ params }: PageProps) {
                         />
                     )}
                 </div>
-                
-                {/* Event Details */}
-                <Card className="mb-8">
-                    <CardHeader>
-                        <CardTitle>Event Details</CardTitle>
-                        <CardDescription>{event.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid gap-4">
-                            <div>
-                                <p className="text-sm font-medium">Event Date</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {new Date(event.date).toLocaleDateString()}
-                                </p>
-                            </div>
-                            <div>
-                                <p className="text-sm font-medium">Voting Period</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {new Date(event.openVotingDate).toLocaleDateString()} - {new Date(event.closeVotingDate).toLocaleDateString()}
-                                </p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
 
-                {/* Vote Distribution */}
-                <h2 className="text-xl font-semibold mb-4">Vote Distribution</h2>
-                <Card className="mb-8">
-                    <CardContent className="pt-6">
-                        <div className="space-y-4">
-                            {voteStats.map((activity) => (
-                                <div key={activity.id} className="space-y-2">
-                                    <div className="flex justify-between mb-2">
-                                        <span className="text-sm font-medium">
-                                            {activity.name}
-                                            {event.selectedActivityId === activity.id && (
-                                                <Badge variant="success" className="ml-2">Winner</Badge>
-                                            )}
-                                        </span>
-                                        <span className="text-sm text-muted-foreground">
-                                            {activity.voteCount} votes ({totalVotes ? Math.round((activity.voteCount / totalVotes) * 100) : 0}%)
-                                        </span>
+                <div className="grid grid-cols-[1fr,300px] gap-6">
+                    {/* Main Content */}
+                    <div className="space-y-8">
+                        {/* Event Details */}
+                        <div className="space-y-6">
+                            <div>
+                                <h2 className="text-lg font-semibold mb-2">Event Details</h2>
+                                <div className="grid grid-cols-3 gap-6">
+                                    <div className="space-y-1">
+                                        <p className="text-sm font-medium text-muted-foreground">Event Date</p>
+                                        <p className="text-sm">
+                                            {new Date(event.date).toLocaleDateString()}
+                                        </p>
                                     </div>
-                                    <Progress value={totalVotes ? (activity.voteCount / totalVotes) * 100 : 0} />
+                                    <div className="space-y-1">
+                                        <p className="text-sm font-medium text-muted-foreground">Voting Opens</p>
+                                        <p className="text-sm">
+                                            {new Date(event.openVotingDate).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-sm font-medium text-muted-foreground">Voting Closes</p>
+                                        <p className="text-sm">
+                                            {new Date(event.closeVotingDate).toLocaleDateString()}
+                                        </p>
+                                    </div>
                                 </div>
-                            ))}
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-sm font-medium text-muted-foreground">Description</p>
+                                <p className="text-sm">{event.description}</p>
+                            </div>
                         </div>
-                    </CardContent>
-                </Card>
 
-                {/* Participation Overview */}
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Member Participation</h2>
-                    <Badge variant={participationRate === 100 ? "success" : "default"}>
-                        {Math.round(participationRate)}% Voted
-                    </Badge>
-                </div>
-                <Card>
-                    <CardContent className="pt-6">
+                        {/* Vote Distribution */}
                         <div className="space-y-4">
+                            <div>
+                                <h2 className="text-lg font-semibold mb-2">Vote Distribution</h2>
+                                <p className="text-sm text-muted-foreground">
+                                    {Math.round(participationRate)}% of members have voted
+                                </p>
+                            </div>
+                            <div className="space-y-4">
+                                {voteStats.map((activity) => (
+                                    <div key={activity.id} className="space-y-2">
+                                        <div className="flex justify-between mb-2">
+                                            <span className="text-sm font-medium">
+                                                {activity.name}
+                                                {event.selectedActivityId === activity.id && (
+                                                    <Badge variant="success" className="ml-2">Winner</Badge>
+                                                )}
+                                            </span>
+                                            <span className="text-sm text-muted-foreground">
+                                                {activity.voteCount} votes ({totalVotes ? Math.round((activity.voteCount / totalVotes) * 100) : 0}%)
+                                            </span>
+                                        </div>
+                                        <Progress value={totalVotes ? (activity.voteCount / totalVotes) * 100 : 0} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Member List Sidebar */}
+                    <div className="border rounded-lg p-6 h-fit">
+                        <div className="mb-4">
+                            <h2 className="text-lg font-semibold">Members</h2>
+                            <p className="text-sm text-muted-foreground">
+                                {participation.filter(p => p.hasVoted).length} of {participation.length} voted
+                            </p>
+                        </div>
+                        <div className="space-y-2">
                             {participation.map((member) => (
                                 <div key={member.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted">
-                                    <div className="flex items-center gap-3">
-                                        <Avatar>
+                                    <div className="flex items-center gap-2">
+                                        <Avatar className="h-8 w-8">
                                             <AvatarFallback>
                                                 {member.firstName[0]}{member.lastName[0]}
                                             </AvatarFallback>
                                         </Avatar>
                                         <div>
-                                            <p className="font-medium">
+                                            <p className="text-sm font-medium">
                                                 {member.firstName} {member.lastName}
                                             </p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {member.email}
-                                            </p>
+                                            {member.hasVoted && member.votedActivityName && (
+                                                <p className="text-xs text-muted-foreground">
+                                                    Voted for: {member.votedActivityName}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        {member.hasVoted ? (
-                                            <>
-                                                <CheckCircle2 className="h-5 w-5 text-green-500" />
-                                                <span className="text-sm text-muted-foreground">
-                                                    Voted {member.voteDate && new Date(member.voteDate).toLocaleDateString()}
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <XCircle className="h-5 w-5 text-red-500" />
-                                                <span className="text-sm text-muted-foreground">Not voted yet</span>
-                                            </>
-                                        )}
-                                    </div>
+                                    {member.hasVoted ? (
+                                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                    ) : (
+                                        <XCircle className="h-4 w-4 text-red-500" />
+                                    )}
                                 </div>
                             ))}
                         </div>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </div>
         );
     } catch (error) {
